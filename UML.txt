@@ -1,0 +1,124 @@
+@startuml
+enum Status {
+    GEMELDET
+    BERGUNG_BEVORSTEHEND
+    VERSCHOLLEN
+    GEBORGEN
+}
+
+' Klasse Person
+class Person {
+    + Integer id
+    + String name
+    + String email
+    // Weitere Attribute und Methoden
+}
+
+' Klasse Geisternetz
+class Geisternetz {
+    + Integer id
+    + double standortLatitude
+    + double standortLongitude
+    + double geschaetzteGroesse
+    + String beschreibung
+    + Status status
+    + Person meldendePerson
+    + Person bergendePerson
+
+    + Geisternetz()
+    + Geisternetz(double standortLatitude, double standortLongitude, double geschaetzteGroesse, Status status)
+    + getId(): Integer
+    + getStandortLatitude(): double
+    + setStandortLatitude(double standortLatitude)
+    + getStandortLongitude(): double
+    + setStandortLongitude(double standortLongitude)
+    + getGeschaetzteGroesse(): double
+    + setGeschaetzteGroesse(double geschaetzteGroesse)
+    + getBeschreibung(): String
+    + setBeschreibung(String beschreibung)
+    + getStatus(): Status
+    + setStatus(Status status)
+    + getMeldendePerson(): Person
+    + setMeldendePerson(Person meldendePerson)
+    + getBergendePerson(): Person
+    + setBergendePerson(Person bergendePerson)
+}
+
+class GeisternetzDAO {
+    - static EntityManagerFactory emf : EntityManagerFactory
+    - em : EntityManager
+    - builder : CriteriaBuilder
+
+    + GeisternetzDAO()
+    + getGeisternetzCount(): long
+    + persist(gen: Geisternetz): void
+    + getAllGeisternetze(): List<Geisternetz>
+    + updateStatus(geisternetzId: Integer, newStatus: Status): void
+}
+
+' Klasse GeisternetzBean
+class GeisternetzBean {
+    - GeisternetzDAO geisternetzDAO
+    - List<Geisternetz> allGeisternetze
+    - List<Geisternetz> filteredGeisternetze
+    - Geisternetz selectedGeisternetz
+    - String personName
+    - boolean anonymous
+    - double longitude
+    - double latitude
+    - double size
+    - String description
+    - String statusFilter
+
+    + GeisternetzBean()
+    + init(): void
+    - applyFilter(): void
+    + setStatusFilter(status: String): void
+    + saveGeisternetz(): void
+    + markAsPendingRecovery(): void
+    + markAsLost(): void
+    + markAsRecovered(): void
+    + onRowSelect(): void
+    + getGeisternetzeForMap(): List<Geisternetz>
+    + getGeisternetzeForMapJson(): String
+    + getLongitude(): double
+    + setLongitude(longitude: double): void
+    + getLatitude(): double
+    + setLatitude(latitude: double): void
+    + getSize(): double
+    + setSize(size: double): void
+    + getDescription(): String
+    + setDescription(description: String): void
+    + getPersonName(): String
+    + setPersonName(personName: String): void
+    + isAnonymous(): boolean
+    + setAnonymous(anonymous: boolean): void
+    + getAllGeisternetze(): List<Geisternetz>
+    + setAllGeisternetze(allGeisternetze: List<Geisternetz>): void
+    + getFilteredGeisternetze(): List<Geisternetz>
+    + setFilteredGeisternetze(filteredGeisternetze: List<Geisternetz>): void
+    + getSelectedGeisternetz(): Geisternetz
+    + setSelectedGeisternetz(selectedGeisternetz: Geisternetz): void
+    + getStatusFilter(): String
+    + getGeisternetzDataJson(): String
+    + getGeisternetzDataJsonBase64(): String
+}
+
+
+
+' Beziehungen zwischen den Klassen
+
+' GeisternetzDAO nutzt EntityManagerFactory, EntityManager und CriteriaBuilder
+
+' GeisternetzDAO operiert auf Geisternetz und verwendet Status
+GeisternetzDAO "1" --> "*" Geisternetz : operiert auf
+GeisternetzDAO "1" --> "1" Status : verwendet
+
+' GeisternetzBean injiziert GeisternetzDAO und verwaltet Geisternetze
+GeisternetzBean "1" --> "1" GeisternetzDAO : injiziert
+GeisternetzBean "1" --> "*" Geisternetz : verwaltet
+
+' Geisternetz hat Beziehungen zu Person
+Geisternetz "0..1" --> "1" Person : meldendePerson
+Geisternetz "0..1" --> "1" Person : bergendePerson
+@enduml

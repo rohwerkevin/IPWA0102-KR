@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Über uns - Geisternetz e.V.</title>
+    <!-- PrimeFaces Theme einbinden -->
+    <h:outputStylesheet name="nova-light/theme.css" library="primefaces"/>
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+    <!-- Responsive Meta-Tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Eingebettete CSS-Styles für ein einheitliches Design -->
+    <style>
+        /* Allgemeine Stile */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f5;
+        }
+
+        /* Header */
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        /* Hauptmenü */
+        .main-menu {
+            background-color: #0056b3;
+            border: none;
+            border-radius: 0;
+        }
+
+        .main-menu .ui-menuitem-link {
+            color: white !important;
+        }
+
+        .main-menu .ui-menuitem-link:hover {
+            background-color: #004080 !important;
+        }
+
+        /* Hauptinhalt */
+        .main-content {
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+
+        .section p {
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .footer-text {
+            margin: 0;
+        }
+
+        /* Projektinfo im Footer */
+        .project-info {
+            margin-top: 10px;
+        }
+
+        .project-text {
+            font-size: 0.9em;
+            color: #dcdcdc;
+            margin: 0;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <!-- Header -->
+    <div class="header">
+        <h1 class="header-title">Geisternetz e.V.</h1>
+        <p class="header-subtitle">Für saubere Meere und eine sichere Zukunft</p>
+    </div>
+
+    <!-- Hauptmenü -->
+    <h:form>
+        <p:menubar styleClass="main-menu">
+            <p:menuitem value="Startseite" outcome="index.xhtml" icon="pi pi-home"/>
+            <p:menuitem value="Geisternetz melden" outcome="addNet.xhtml" icon="pi pi-pencil"/>
+            <p:menuitem value="Geisternetze anzeigen" outcome="showNets.xhtml" icon="pi pi-eye"/>
+            <p:menuitem value="Karte" outcome="map.xhtml" icon="pi pi-map"/>
+            <p:menuitem value="Über uns" outcome="about.xhtml" icon="pi pi-info-circle"/>
+        </p:menubar>
+    </h:form>
+
+    <!-- Hauptinhalt -->
+    <div class="main-content">
+        <div class="section">
+            <h2>Über Geisternetz e.V.</h2>
+            <p>
+                Geisternetz e.V. ist eine gemeinnützige Organisation, die sich dem Schutz der Meeresumwelt verschrieben hat. Unser Fokus liegt auf der Bergung von verlorenen oder zurückgelassenen Fischernetzen, den sogenannten "Geisternetzen", die eine erhebliche Gefahr für die marine Tier- und Pflanzenwelt darstellen.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Unsere Mission</h2>
+            <p>
+                Wir setzen uns dafür ein, die Ozeane von Geisternetzen zu befreien, um das Ökosystem Meer zu schützen und die Artenvielfalt zu erhalten. Durch Aufklärung, Forschung und aktive Bergungsaktionen tragen wir dazu bei, die Meere für zukünftige Generationen zu bewahren.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Unser Team</h2>
+            <p>
+                Unser Team besteht aus engagierten Meeresbiologen, Tauchern und freiwilligen Helfern, die ihre Leidenschaft für den Schutz der Meere teilen. Gemeinsam arbeiten wir daran, das Bewusstsein für die Problematik der Geisternetze zu schärfen und praktische Lösungen zu finden.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Kontaktieren Sie uns</h2>
+            <p>
+                Haben Sie Fragen oder möchten Sie mehr über unsere Arbeit erfahren? Kontaktieren Sie uns gerne per E-Mail unter <a href="mailto:info@geisternetz-ev.de">info@geisternetz-ev.de</a> oder besuchen Sie uns in unserem Büro in Hamburg.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-text">© 2024 Geisternetz e.V. Alle Rechte vorbehalten.</p>
+        <!-- Projektinfo hinzufügen -->
+        <div class="project-info">
+            <p class="project-text">Dieses Webapplikation ist ein Uni-Projekt im Rahmen des Moduls IPWA01-02. Alle dargestellten Daten sind fiktiv.</p>
+        </div>
+    </div>
+</h:body>
+</html>

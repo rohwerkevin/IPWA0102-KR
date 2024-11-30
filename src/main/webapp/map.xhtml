@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Karte - Geisternetz e.V.</title>
+    <!-- PrimeFaces Theme einbinden -->
+    <h:outputStylesheet library="primefaces" name="nova-light/theme.css" />
+    <h:outputStylesheet library="primefaces" name="primeicons/primeicons.css" />
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <!-- Responsive Meta-Tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Eingebettete CSS-Styles für ein einheitliches Design -->
+    <style>
+        /* Allgemeine Stile */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f5;
+        }
+
+        /* Header */
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Hauptmenü */
+        .main-menu {
+            background-color: #0056b3;
+            border: none;
+            border-radius: 0;
+        }
+
+        .main-menu .ui-menuitem-link {
+            color: white !important;
+        }
+
+        .main-menu .ui-menuitem-link:hover {
+            background-color: #004080 !important;
+        }
+
+        /* Hauptinhalt */
+        .main-content {
+            padding: 40px;
+        }
+
+        /* Kartenstil */
+        #mapid {
+            width: 100%;
+            height: 600px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .footer-text {
+            margin: 0;
+        }
+
+        /* Medienabfragen für Responsivität */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2em;
+            }
+
+            .header-subtitle {
+                font-size: 1.2em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            #mapid {
+                height: 400px;
+            }
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <!-- Header -->
+    <div class="header">
+        <h1 class="header-title">Geisternetz e.V.</h1>
+        <p class="header-subtitle">Für saubere Meere und eine sichere Zukunft</p>
+    </div>
+
+    <!-- Hauptmenü -->
+    <h:form>
+        <p:menubar styleClass="main-menu">
+            <p:menuitem value="Startseite" outcome="index.xhtml" icon="pi pi-home"/>
+            <p:menuitem value="Geisternetz melden" outcome="addNet.xhtml" icon="pi pi-pencil"/>
+            <p:menuitem value="Geisternetze anzeigen" outcome="showNets.xhtml" icon="pi pi-eye"/>
+            <p:menuitem value="Karte" outcome="map.xhtml" icon="pi pi-map"/>
+            <p:menuitem value="Über uns" outcome="about.xhtml" icon="pi pi-info-circle"/>
+        </p:menubar>
+    </h:form>
+
+    <!-- Hauptinhalt -->
+    <div class="main-content">
+        <h2>Karte der nicht-geborgenen Geisternetze</h2>
+        <!-- Kartencontainer -->
+        <div id="mapid"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="project-info">
+        <p class="project-text">Dieses Webapplikation ist ein Uni-Projekt im Rahmen des Moduls IPWA01-02. Alle dargestellten Daten sind fiktiv.</p>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+    <!-- JavaScript zum Initialisieren der Karte -->
+    <h:outputScript target="body">
+        //<![CDATA[
+        // Initialisiere die Karte und setze den Mittelpunkt und die Zoomstufe
+        var mymap = L.map('mapid').setView([52.5200, 13.4050], 5); // Mitte von Deutschland
+
+        // Füge die OpenStreetMap-Kachel hinzu
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&#169; OpenStreetMap-Mitwirkende'
+        }).addTo(mymap);
+
+        // Geisternetz-Daten aus der Managed Bean einbinden (gefiltert)
+        var geisternetzData = JSON.parse('#{geisternetzBean.geisternetzeForMapJson}');
+
+        // Überprüfen der Daten in der Konsole
+        console.log("Geisternetz-Daten:", geisternetzData);
+
+        // Marker hinzufügen
+        geisternetzData.forEach(function(geisternetz) {
+            // Überprüfen, ob die notwendigen Felder vorhanden sind
+            if (geisternetz.standortLatitude && geisternetz.standortLongitude) {
+                L.marker([geisternetz.standortLatitude, geisternetz.standortLongitude]).addTo(mymap)
+                        .bindPopup("<b>Geisternetz ID:</b> " + geisternetz.id +
+                                "<br/><b>Größe:</b> " + geisternetz.geschaetzteGroesse + " m²" +
+                                "<br/><b>Status:</b> " + geisternetz.status +
+                                "<br/><b>Beschreibung:</b> " + geisternetz.beschreibung);
+            } else {
+                console.warn("Geisternetz mit ID " + geisternetz.id + " hat keine gültigen Standortdaten.");
+            }
+        });
+        //]]>
+    </h:outputScript>
+</h:body>
+</html>

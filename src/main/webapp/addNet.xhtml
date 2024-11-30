@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Geisternetz Erfassen - Geisternetz e.V.</title>
+    <!-- PrimeFaces Theme einbinden -->
+    <h:outputStylesheet name="nova-light/theme.css" library="primefaces"/>
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+    <!-- Responsive Meta-Tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Eingebettete CSS-Styles für ein einheitliches Design -->
+    <style>
+        /* Allgemeine Stile */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f5;
+        }
+
+        /* Header */
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        /* Hauptmenü */
+        .main-menu {
+            background-color: #0056b3;
+            border: none;
+            border-radius: 0;
+        }
+
+        .main-menu .ui-menuitem-link {
+            color: white !important;
+        }
+
+        .main-menu .ui-menuitem-link:hover {
+            background-color: #004080 !important;
+        }
+
+        /* Hauptinhalt */
+        .main-content {
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 700px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-row {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-row label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Medienabfragen für Responsivität */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2em;
+            }
+
+            .header-subtitle {
+                font-size: 1.2em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <!-- Header -->
+    <div class="header">
+        <h1 class="header-title">Geisternetz e.V.</h1>
+        <p class="header-subtitle">Für saubere Meere und eine sichere Zukunft</p>
+    </div>
+
+    <!-- Hauptmenü -->
+    <h:form>
+        <p:menubar styleClass="main-menu">
+            <p:menuitem value="Startseite" outcome="index.xhtml" icon="pi pi-home"/>
+            <p:menuitem value="Geisternetz melden" outcome="addNet.xhtml" icon="pi pi-pencil"/>
+            <p:menuitem value="Geisternetze anzeigen" outcome="showNets.xhtml" icon="pi pi-eye"/>
+            <p:menuitem value="Karte" outcome="map.xhtml" icon="pi pi-map"/>
+            <p:menuitem value="Über uns" outcome="about.xhtml" icon="pi pi-info-circle"/>
+        </p:menubar>
+    </h:form>
+
+    <!-- Hauptinhalt -->
+    <div class="main-content">
+        <h:form id="addNetForm" class="form-container">
+            <p:panel header="Geisternetz Erfassen">
+                <p:messages id="messages" autoUpdate="true" closable="true" />
+                <div class="form-row">
+                    <p:outputLabel for="anonymous" value="Anonym melden:" />
+                    <p:selectBooleanCheckbox id="anonymous" value="#{geisternetzBean.anonymous}" >
+                        <p:ajax update="personNameRow" />
+                    </p:selectBooleanCheckbox>
+                </div>
+                <h:panelGroup id="personNameRow" layout="block">
+                    <ui:fragment rendered="#{!geisternetzBean.anonymous}">
+                        <div class="form-row">
+                            <p:outputLabel for="personName" value="Name der Person:" />
+                            <p:inputText id="personName" value="#{geisternetzBean.personName}"
+                                         placeholder="Name eingeben" required="true" />
+                        </div>
+                    </ui:fragment>
+                </h:panelGroup>
+                <div class="form-row">
+                    <p:outputLabel for="longitude" value="Standort Longitude:" />
+                    <p:inputText id="longitude" value="#{geisternetzBean.longitude}" placeholder="z. B. 13.4050"
+                                 required="true">
+                        <f:validateDoubleRange minimum="-180" maximum="180" />
+                    </p:inputText>
+                </div>
+                <div class="form-row">
+                    <p:outputLabel for="latitude" value="Standort Latitude:" />
+                    <p:inputText id="latitude" value="#{geisternetzBean.latitude}" placeholder="z. B. 52.5200"
+                                 required="true">
+                        <f:validateDoubleRange minimum="-90" maximum="90" />
+                    </p:inputText>
+                </div>
+                <div class="form-row">
+                    <p:outputLabel for="size" value="Größe (m²):" />
+                    <p:inputText id="size" value="#{geisternetzBean.size}" placeholder="z. B. 1500" required="true">
+                        <f:validateLongRange minimum="1" />
+                    </p:inputText>
+                </div>
+                <div class="form-row">
+                    <p:outputLabel for="description" value="Beschreibung:" />
+                    <p:inputTextarea id="description" value="#{geisternetzBean.description}" rows="4" cols="30"
+                                     placeholder="Beschreibung eingeben (optional)" maxlength="500" />
+                </div>
+                <div class="button-group">
+                    <p:commandButton value="Geisternetz melden" icon="pi pi-save"
+                                     action="#{geisternetzBean.saveGeisternetz}"
+                                     update="@form messages"
+                                     process="@form"
+                                     immediate="false" />
+                </div>
+            </p:panel>
+        </h:form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&#169; 2024 Geisternetz e.V. Alle Rechte vorbehalten.</p>
+    </div>
+</h:body>
+</html>

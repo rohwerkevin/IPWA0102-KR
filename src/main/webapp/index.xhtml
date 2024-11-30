@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Geisternetz - Willkommen</title>
+    <!-- PrimeFaces Theme einbinden -->
+    <h:outputStylesheet library="primefaces" name="nova-light/theme.css"/>
+    <!-- PrimeIcons für Icons einbinden -->
+    <h:outputStylesheet library="primefaces" name="primeicons/primeicons.css"/>
+    <!-- Eigene CSS-Datei einbinden -->
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+    <!-- Responsive Meta-Tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Eingebettete CSS-Styles -->
+    <style>
+        /* Setze die Höhe von html und body auf 100% */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Flexbox-Layout für den Body */
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f5;
+        }
+
+        /* Header */
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        /* Hauptmenü */
+        .main-menu {
+            background-color: #0056b3;
+            border: none;
+            border-radius: 0;
+        }
+
+        .main-menu .ui-menuitem-link {
+            color: white !important;
+        }
+
+        .main-menu .ui-menuitem-link:hover {
+            background-color: #004080 !important;
+        }
+
+        /* Hauptinhalt */
+        .main-content {
+            flex: 1; /* Lässt den Hauptinhalt den verfügbaren Platz einnehmen */
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .intro-text {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Funktionen der Navbar in 1xN Grid */
+        .navbar-functions {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .functions-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .function-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #0056b3;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: calc(20% - 20px); /* Fünf Elemente pro Reihe mit Abstand */
+            margin: 10px 0;
+        }
+
+        .function-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .function-icon {
+            font-size: 2.5em;
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+
+        .function-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .function-description {
+            font-size: 1em;
+            color: #555;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .footer-text {
+            margin: 0;
+        }
+
+        /* Projektinfo im Footer */
+        .project-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #dcdcdc;
+        }
+
+        /* Medienabfragen für Responsivität */
+        @media (max-width: 1200px) {
+            .function-link {
+                width: calc(33.333% - 20px); /* Drei Elemente pro Reihe */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2em;
+            }
+
+            .header-subtitle {
+                font-size: 1.2em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .intro-text {
+                padding: 15px;
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+
+            .functions-container {
+                justify-content: center;
+            }
+
+            .function-link {
+                width: calc(50% - 20px); /* Zwei Elemente pro Reihe */
+                padding: 15px;
+            }
+
+            .function-icon {
+                font-size: 2em;
+            }
+
+            .function-title {
+                font-size: 1em;
+            }
+
+            .function-description {
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .function-link {
+                width: 100%; /* Ein Element pro Reihe */
+                margin: 10px 0;
+            }
+        }
+    </style>
+</h:head>
+<h:body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1 class="header-title">Geisternetz e.V.</h1>
+            <h2 class="header-subtitle">Für saubere Meere und eine sichere Zukunft</h2>
+        </div>
+    </div>
+
+    <!-- Hauptmenü
+    <h:form>
+        <p:menubar styleClass="main-menu">
+            <p:menuitem value="Startseite" outcome="index.xhtml" icon="pi pi-home"/>
+            <p:menuitem value="Geisternetz melden" outcome="addNet.xhtml" icon="pi pi-pencil"/>
+            <p:menuitem value="Geisternetze anzeigen" outcome="showNets.xhtml" icon="pi pi-eye"/>
+            <p:menuitem value="Karte" outcome="map.xhtml" icon="pi pi-map"/>
+            <p:menuitem value="Über uns" outcome="about.xhtml" icon="pi pi-info-circle"/>
+        </p:menubar>
+    </h:form>
+-->
+    <!-- Hauptinhalt -->
+    <div class="main-content">
+        <!-- Einführungstext -->
+        <h:panelGroup layout="block" styleClass="intro-text">
+            <h:outputText value="Herzlich willkommen bei Geisternetz e.V.! Wir freuen uns, dass Sie den Weg zu uns gefunden haben. Geisternetz e.V. ist eine gemeinnützige Organisation, die sich dem Aufspüren und Bergen von verlorenen Fischernetzen widmet. Diese sogenannten 'Geisternetze' treiben unkontrolliert in unseren Ozeanen und stellen eine erhebliche Gefahr für die Meeresfauna und -flora dar. Unser Ziel ist es, die Meere von diesen unsichtbaren Gefahren zu befreien und das maritime Ökosystem zu schützen." escape="false"/>
+        </h:panelGroup>
+
+
+        <!-- Funktionen der Navbar in 1xN Grid -->
+        <div class="navbar-functions">
+            <p:panel header="Unsere Funktionen" style="border:none;">
+                <div class="functions-container">
+                    <!-- Startseite -->
+                    <h:link outcome="index.xhtml" styleClass="function-link">
+                        <i class="pi pi-home function-icon"></i>
+                        <div class="function-title">Startseite</div>
+                        <div class="function-description">Überblick über unsere Mission und Projekte.</div>
+                    </h:link>
+                    <!-- Geisternetz melden -->
+                    <h:link outcome="addNet.xhtml" styleClass="function-link">
+                        <i class="pi pi-pencil function-icon"></i>
+                        <div class="function-title">Geisternetz melden</div>
+                        <div class="function-description">Melden Sie gefundene Geisternetze direkt online.</div>
+                    </h:link>
+                    <!-- Geisternetze anzeigen -->
+                    <h:link outcome="showNets.xhtml" styleClass="function-link">
+                        <i class="pi pi-eye function-icon"></i>
+                        <div class="function-title">Geisternetze anzeigen</div>
+                        <div class="function-description">Alle registrierten Geisternetze und ihre Standorte.</div>
+                    </h:link>
+                    <!-- Karte -->
+                    <h:link outcome="map.xhtml" styleClass="function-link">
+                        <i class="pi pi-map function-icon"></i>
+                        <div class="function-title">Karte</div>
+                        <div class="function-description">Interaktive Karte der Geisternetze in Echtzeit.</div>
+                    </h:link>
+                    <!-- Über uns -->
+                    <h:link outcome="about.xhtml" styleClass="function-link">
+                        <i class="pi pi-info-circle function-icon"></i>
+                        <div class="function-title">Über uns</div>
+                        <div class="function-description">Erfahren Sie mehr über unser Team und Ziele.</div>
+                    </h:link>
+                </div>
+            </p:panel>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <h:outputText value="© 2024 Geisternetz e.V. Alle Rechte vorbehalten." styleClass="footer-text"/>
+        <!-- Projektinfo hinzufügen -->
+        <div class="project-info">
+            <p class="project-text">Dieses Webapplikation ist ein Uni-Projekt im Rahmen des Moduls IPWA01-02. Alle dargestellten Daten sind fiktiv.</p>
+        </div>
+    </div>
+</h:body>
+</html>

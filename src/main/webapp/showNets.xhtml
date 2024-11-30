@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Geisternetze anzeigen - Geisternetz e.V.</title>
+    <!-- PrimeFaces Theme einbinden -->
+    <h:outputStylesheet name="nova-light/theme.css" library="primefaces"/>
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+    <!-- Responsive Meta-Tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Eingebettete CSS-Styles für ein einheitliches Design -->
+    <style>
+        /* Allgemeine Stile */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        /* Hauptmenü */
+        .main-menu {
+            background-color: #0056b3;
+            border: none;
+            border-radius: 0;
+        }
+
+        .main-menu .ui-menuitem-link {
+            color: white !important;
+        }
+
+        .main-menu .ui-menuitem-link:hover {
+            background-color: #004080 !important;
+        }
+
+        /* Hauptinhalt */
+        .main-content {
+            flex: 1; /* Lässt den Hauptinhalt den verfügbaren Platz einnehmen */
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* DataTable */
+        .ui-datatable {
+            width: 100% !important;
+        }
+
+        .ui-datatable th, .ui-datatable td {
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .footer-text {
+            margin: 0;
+        }
+
+        /* Projektinfo im Footer */
+        .project-info {
+            margin-top: 10px;
+        }
+
+        .project-text {
+            font-size: 0.9em;
+            color: #dcdcdc;
+            margin: 0;
+        }
+
+        /* Medienabfragen für Responsivität */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2em;
+            }
+
+            .header-subtitle {
+                font-size: 1.2em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .ui-datatable th, .ui-datatable td {
+                font-size: 0.9em;
+            }
+
+            .filter-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-button {
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Stil für die Filter-Toolbar */
+        .filter-toolbar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            min-width: 150px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <!-- Header -->
+    <div class="header">
+        <h1 class="header-title">Geisternetz e.V.</h1>
+        <p class="header-subtitle">Für saubere Meere und eine sichere Zukunft</p>
+    </div>
+
+    <!-- Hauptmenü -->
+    <h:form>
+        <p:menubar styleClass="main-menu">
+            <p:menuitem value="Startseite" outcome="index.xhtml" icon="pi pi-home"/>
+            <p:menuitem value="Geisternetz melden" outcome="addNet.xhtml" icon="pi pi-pencil"/>
+            <p:menuitem value="Geisternetze anzeigen" outcome="showNets.xhtml" icon="pi pi-eye"/>
+            <p:menuitem value="Karte" outcome="map.xhtml" icon="pi pi-map"/>
+            <p:menuitem value="Über uns" outcome="about.xhtml" icon="pi pi-info-circle"/>
+        </p:menubar>
+    </h:form>
+
+    <!-- Hauptinhalt -->
+    <div class="main-content">
+        <h2>Liste der Geisternetze</h2>
+
+        <!-- Filter-Toolbar -->
+        <h:form id="filterForm">
+            <div class="filter-toolbar">
+                <p:commandButton value="Alle anzeigen"
+                                 action="#{geisternetzBean.setStatusFilter('ALL')}"
+                                 update="dataForm:datatableId"
+                                 styleClass="filter-button"/>
+                <p:commandButton value="Verschollen"
+                                 action="#{geisternetzBean.setStatusFilter('Verschollen')}"
+                                 update="dataForm:datatableId"
+                                 styleClass="filter-button"/>
+                <p:commandButton value="Zur Bergung eingetragen"
+                                 action="#{geisternetzBean.setStatusFilter('BERGUNG_BEVORSTEHEND')}"
+                                 update="dataForm:datatableId"
+                                 styleClass="filter-button"/>
+                <p:commandButton value="Geborgene Netze"
+                                 action="#{geisternetzBean.setStatusFilter('GEBORGEN')}"
+                                 update="dataForm:datatableId"
+                                 styleClass="filter-button"/>
+
+            </div>
+        </h:form>
+
+        <!-- Formular und DataTable -->
+        <h:form id="dataForm">
+            <!-- Debug-Meldungen -->
+            <p:messages id="debugMessages" autoUpdate="true" closable="true" />
+            <!-- DatenTabelle -->
+            <p:dataTable id="datatableId" value="#{geisternetzBean.filteredGeisternetze}" var="geisternetz"
+                         paginator="true" rows="10" responsiveLayout="scroll"
+                         selection="#{geisternetzBean.selectedGeisternetz}" selectionMode="single"
+                         rowKey="#{geisternetz.id}">
+                <p:ajax event="rowSelect" listener="#{geisternetzBean.onRowSelect}" update="dataForm:debugMessages" />
+
+                <p:column headerText="ID" sortBy="#{geisternetz.id}">
+                    <h:outputText value="#{geisternetz.id}" />
+                </p:column>
+                <p:column headerText="Latitude" sortBy="#{geisternetz.standortLatitude}">
+                    <h:outputText value="#{geisternetz.standortLatitude}" />
+                </p:column>
+                <p:column headerText="Longitude" sortBy="#{geisternetz.standortLongitude}">
+                    <h:outputText value="#{geisternetz.standortLongitude}" />
+                </p:column>
+                <p:column headerText="Größe (m²)" sortBy="#{geisternetz.geschaetzteGroesse}">
+                    <h:outputText value="#{geisternetz.geschaetzteGroesse}" />
+                </p:column>
+                <p:column headerText="Status" sortBy="#{geisternetz.status}">
+                    <h:outputText value="#{geisternetz.status}" />
+                </p:column>
+                <p:column headerText="Meldende Person" sortBy="#{geisternetz.meldendePerson.name}">
+                    <h:outputText value="#{geisternetz.meldendePerson.name}" />
+                </p:column>
+                <p:column headerText="Bergende Person" sortBy="#{geisternetz.bergendePerson.name}">
+                    <h:outputText value="#{geisternetz.bergendePerson.name}" />
+                </p:column>
+                <p:column headerText="Beschreibung">
+                    <h:outputText value="#{geisternetz.beschreibung}" />
+                </p:column>
+            </p:dataTable>
+
+            <!-- Kontextmenü -->
+            <p:contextMenu id="contextMenu" for="dataForm:datatableId">
+                <p:menuitem value="Zur Bergung eintragen" icon="pi pi-upload"
+                            actionListener="#{geisternetzBean.markAsPendingRecovery}"
+                            update="dataForm:datatableId dataForm:debugMessages" />
+                <p:menuitem value="Als geborgen melden" icon="pi pi-check"
+                            actionListener="#{geisternetzBean.markAsRecovered()}"
+                            update="dataForm:datatableId dataForm:debugMessages" />
+                <p:menuitem value="Status auf 'Verschollen'" icon="pi pi-times"
+                            actionListener="#{geisternetzBean.markAsLost}"
+                            update="dataForm:datatableId dataForm:debugMessages" />
+            </p:contextMenu>
+
+
+        </h:form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-text">© 2024 Geisternetz e.V. Alle Rechte vorbehalten.</p>
+        <!-- Projektinfo hinzufügen -->
+        <div class="project-info">
+            <p class="project-text">Dieses Webapplikation ist ein Uni-Projekt im Rahmen des Moduls IPWA01-02. Alle dargestellten Daten sind fiktiv.</p>
+        </div>
+    </div>
+</h:body>
+</html>
